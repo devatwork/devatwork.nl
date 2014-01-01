@@ -41,6 +41,13 @@ docpadConfig =
       # Your company's name
       copyright: "© Bert Willems 2014"
 
+      services:
+        buttons: ['TwitterTweet', 'GooglePlusOne', 'RedditSubmit', 'TwitterFollow', 'GithubFollow']
+        twitterTweetButton: 'devatwork'
+        twitterFollowButton: 'devatwork'
+        githubFollowButton: 'devatwork'
+        googleAnalytics: 'UA-4409537-1'
+
 
     # Helper Functions
     # ----------------

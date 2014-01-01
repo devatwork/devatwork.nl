@@ -11,6 +11,8 @@ article#post.post
 				span.tag= tag
 	.post-content!= content
 
+!= getSocialButtons()
+
 footer
 	if document.relatedDocuments && document.relatedDocuments.length
 		section#related

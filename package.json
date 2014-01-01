@@ -46,7 +46,8 @@
     "docpad-plugin-livereload": "2.x",
     "bower": "~1",
     "docpad-plugin-ghpages": "~2.4.1",
-    "docpad-plugin-highlightjs": "~2.1.9"
+    "docpad-plugin-highlightjs": "~2.1.9",
+    "docpad-plugin-services": "~2.5.0"
   },
   "main": "node_modules/docpad/bin/docpad-server",
   "scripts": {
