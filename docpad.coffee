@@ -12,35 +12,34 @@ docpadConfig =
     # Specify some site properties
     site:
       # The production url of our website
-      url: "http://website.com"
+      url: "http://devatwork.nl"
 
       # Here are some old site urls that you would like to redirect from
       oldUrls: [
-        'www.website.com',
-        'website.herokuapp.com'
+        'www.devatwork.nl'
       ]
 
       # The default title of our website
-      title: "Your Website"
+      title: "DevAtWork"
 
       # The website description (for SEO)
       description: """
-        When your website appears in search results in say Google, the text here will be shown underneath your website's title.
+        A day in the life of a developer
         """
 
       # The website keywords (for SEO) separated by commas
       keywords: """
-        place, your, website, keywoards, here, keep, them, related, to, the, content, of, your, website
+       Trilobyte, Bert Willems, Dev @ Work, dev at work, Bert, Willems, developer, software, programmer, lead developer, architect, JavaScript, dotNET
         """
 
       # The website author's name
-      author: "Your Name"
+      author: "Bert Willems"
 
       # The website author's email
-      email: "your@email.com"
+      email: "b.willems@premotion.nl"
 
       # Your company's name
-      copyright: "© Your Company 2013"
+      copyright: "© Bert Willems 2014"
 
 
     # Helper Functions
@@ -80,6 +79,10 @@ docpadConfig =
     # This one, will fetch in all documents that will be outputted to the posts directory
     posts: (database) ->
       database.findAllLive({relativeOutDirPath:'posts'},[date:-1])
+
+    # This one, will fetch in all documents that will be outputted to the projects directory
+    projects: (database) ->
+      database.findAllLive({relativeOutDirPath:'projects'},[date:-1])
 
 
   # DocPad Events

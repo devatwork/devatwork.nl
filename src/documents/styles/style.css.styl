@@ -1,13 +1,38 @@
-a, a:link
-  cursor pointer
+.col-left,
+.col-right
+	padding 0
 
-body
-  padding-top 60px
+.top
 
-table
-  tfoot, tbody
-    th
-      border-top 1px solid #DDD
+	.brand
+		background #333
+		margin: 0
+		padding 10px 30px
+		a
+			color #fff
+			font-size 1.5em
+			padding 10px 0
 
-footer
-  padding-bottom: 30px
+	.list-inline
+		display table
+		margin 0
+		padding 0
+		text-align center
+		width 100%
+
+		li
+			display table-cell
+			margin 0
+			padding 0
+			width 25%
+
+			&.active
+				background #f7
+
+			a
+				border-right 1px solid #e6
+				color #333
+				display block
+				font-size 1.5em
+				padding 10px 0
+				text-transform uppercase
