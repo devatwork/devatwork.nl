@@ -3,7 +3,11 @@ layout: default
 ---
 
 article#post.post
-  h1= document.title
+  hgroup
+    h1= document.title
+    h3
+      each tag in document.tags
+        span.tag= tag
   .post-content!= content
 
 footer

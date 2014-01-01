@@ -1,3 +1,17 @@
+body
+	font-family 'Lato', sans-serif
+
+h1,
+h2,
+h3,
+h4
+	font-family 'Open Sans Condensed', sans-serif
+	font-weight 700
+	text-transform uppercase
+
+h1
+	border-bottom solid 2px
+
 html, body, .container
 	height 100%
 
@@ -19,8 +33,11 @@ html, body, .container
 		padding 10px 30px
 		a
 			color #fff
+			font-family 'Open Sans Condensed', sans-serif
 			font-size 1.5em
+			font-weight 700
 			padding 10px 0
+			text-transform uppercase
 
 	.list-inline
 		display table
@@ -43,6 +60,7 @@ html, body, .container
 				color #333
 				display block
 				font-size 1.5em
+				font-weight bold
 				padding 10px 0
 				text-transform uppercase
 			&.social
@@ -69,6 +87,32 @@ html, body, .container
 .list-group-item
 	h5
 		span
+			color #80
+			&:after
+				content ', '
+			&:last-child:after
+				content ''
+
+hgroup
+	margin 0 0 10px 0
+	h1
+		margin 0 0 10px 0
+	h2
+		color #cc
+		font-family 'Lato', sans-serif
+		font-style italic
+		font-size 24px
+		font-weight normal
+		margin 0 0 5px 0
+		text-transform none
+	h3
+		font-family 'Lato', sans-serif
+		font-size 14px
+		font-weight normal
+		margin 0 0 5px 0
+		text-transform lowercase
+		span
+			color #80
 			&:after
 				content ', '
 			&:last-child:after
