@@ -1,0 +1,58 @@
+---
+title: Baking IL With DynamicMethod
+layout: post
+tags: ['dotnet', 'msil', 'liones']
+date: 2009-05-31
+---
+
+p At the moment I am building a new script engine which is consists of text and expressions embedded in them. Those expressions are basically calls to functions and have any number of arguments. The implementation of those functions is done in C#.
+
+p At compile time I don't know which methods are going to be called so I have to invoke them at runtime. The most obvious way to do that is to use the reflection API of .NET to do a late bound method call. Although, IMHO, this is a perfectly valid solution to this problem it isn't exactly fast.
+
+p System.Reflection.Emit.DynamicMethod is a better alternative for late bound method invocation when it comes to performance. Although it requires you to write Intermediate Language (IL) it is actually quite easy to use.
+
+p Let me first show you an example:
+
+pre
+	code(class='lang-cs').
+		public class Program
+		{
+			public delegate void SayHello(string name);
+
+			public static void Main(string[] args)
+			{
+				var sayHelloMethod = BakeHelloMethod();
+				sayHelloMethod("Trilobyte");
+			}
+
+			public static SayHello BakeHelloMethod()
+			{
+				// get the System.Console.Write method
+				Type consoleType = typeof (Console);
+				MethodInfo writeMethodInfo = consoleType.GetMethod("Write", new[] {typeof (string)});
+
+				// create a new dynamic method with return type void and one argument of type string and get its IL generator
+				var dynamicMethod = new DynamicMethod(string.Empty, typeof (void), new[] {typeof (string)});
+				ILGenerator methodGenerator = dynamicMethod.GetILGenerator();
+
+				// first write 'Hello, '
+				methodGenerator.Emit(OpCodes.Ldstr, "Hello, ");
+				methodGenerator.Emit(OpCodes.Call, writeMethodInfo);
+
+				// next write the name which is the first argument
+				methodGenerator.Emit(OpCodes.Ldarg_0);
+				methodGenerator.Emit(OpCodes.Call, writeMethodInfo);
+
+				// finish the method
+				methodGenerator.Emit(OpCodes.Ret);
+
+				// create a delegate to the method we just created
+				return (SayHello)dynamicMethod.CreateDelegate(typeof (SayHello));
+			}
+		}
+
+p Creating a late bound method call using DynamicMethod isn't as complex as you might think. It only took 10 lines of code to generate a functional method. The only difficult part is baking the IL yourself, but you can use tool like <a title=".NET Reflector" href="http://www.red-gate.com/products/reflector/">Reflector</a> to decompile C# code and see how it works in IL.
+
+p Although I don't use IL very often, maybe once a year, I still find it a useful tool to optimize performance of applications and I recommend to invest some time in learning the basics because it gives you a great insight in how the CLR actually works.
+
+p Cheers!

@@ -1,0 +1,43 @@
+---
+title: Building Kluwer Support Portal - a Developers Perspective
+layout: post
+tags: ['liferay', 'liones']
+date: 2010-12-17
+---
+
+p In the past two months we (<a title="Liones, Internetbureau voor uitgevers" href="http://www.liones.nl/" target="_blank">Liones</a>) build a new <a title="Enterprise open source portal and collaboration software - Liferay.com" href="http://www.liferay.com/" target="_blank">Liferay</a> based portal for <a title="Kluwer - a Wolters Kluwer business" href="http://www.kluwer.nl" target="_blank">Kluwer</a> (a major Dutch publisher), one of our clients. The purpose of this portal is to help the customers of Kluwer online products to understand and use their products better. This week the <a title="Kluwer Support" href="http://www.kluwer.nl/support/" target="_blank">Kluwer Support</a> portal was launched with success and I reckoned this was a good moment to share some insight in how we developed that particular portal and what problems we encountered during the development.
+
+p But let’s have a look at the result first:
+<p style="text-align: center;"><a href="/postcontent/kluwer-support.png"><img class="size-medium wp-image-832 aligncenter" title="Kluwer Support screenshot" src="/postcontent/kluwer-support-278x300.png" alt="" width="278" height="300" /></a></p>
+p I hope you agree with me when I say that it looks great, I know for a fact a lot of people do. You can find the actual portal at <a title="Kluwer Support" href="http://www.kluwer.nl/support" target="_blank">http://www.kluwer.nl/support</a>, although the portal is in Dutch, feel free to look around.
+
+p In the next few paragraphs I will share some challenges we faced and the lessons we learned while implementing the Kluwer Support portal.
+
+h3 Design
+p One of the challenges for us in this project was to transform the graphical design, created by Evident, into HTML and then into a Liferay theme. Our front-end specialist, <a title="Vincent Smedinga" href="http://nl.linkedin.com/in/vincentsmedinga" target="_blank">Vincent Smedinga</a>, first transformed the PSD into HMTL using the latest versions of HTML 5, CSS 3 and other best front-end practices like Modernizr en Selectivzr. These technologies enabled him to create the HTML semantically correct, let it display correctly in older, less compliant browsers while staying true to the graphical design.
+
+p The now finished HTML needed to be transformed into Liferay components like themes, layouts and the actual portlets. That task proofed to be quiet challenging for <a title="Stef Busking" href="http://nl.linkedin.com/in/stefbusking" target="_blank">Stef Busking</a> (one of our Liferay software engineers) and me. The reason why this task was challenging is that fact that we needed to reuse as much standard Liferay components as possible. The two things that it so difficult and almost impossible were the different styles per portlet and the ‘read more’ links. Let have a look at some of the different ‘web-content display portlet’ styles used in the portal:
+table
+	tbody
+		tr
+			td <img class="size-full wp-image-836" style="width: 172px; height: 120px;" title="web content display portlet 1" src="/postcontent/web-content-display-portlet-1.png" alt="" width="206" height="142" />
+			td <img class="size-full wp-image-837" style="width: 172px; height: 120px;" title="web content display portlet 2" src="/postcontent/web-content-display-portlet-2.png" alt="" width="244" height="144" />
+			td <img class="size-full wp-image-838" style="width: 172px; height: 120px;" title="web content display portlet 3" src="/postcontent/web-content-display-portlet-3.png" alt="" width="211" height="246" />
+
+p Liferay, at least not version 5.2.8 EE, does not support these requirements out of the box (Not entirely true: Liferay does allow you to specify custom CSS rules per portlet instance, but you would need a front-end specialist to maintain the website which IMHO is not acceptable).
+
+p To make it even more difficult we were not allowed to use Liferay Ext or place many hooks or have impact on existing communities in the portal instance,  which, in my opinion, is a good thing. However, that forced us to think hard and we (although I should have said Stef here because he is the one who came up with the idea) found a clever solution to solve both problems with the use of one JSP hook.
+
+p I want you think about how you would have solved this problem in these fairly strict conditions. You can find <a title="Solving the Portlet Design Problem" href="http://www.devatwork.nl/2010/12/solving-the-portlet-design-problem/">the solution here</a>.
+
+h3 Search
+p Another problem we faced were the search requirements like ‘auto complete’ and sorting web content (FAQ entries and videos) according to their structure. We decided that the default Liferay search option would not be sufficient because we would not be able to implement the ‘auto complete’.
+
+p After researching several alternatives we choose to use one of the most powerful open-source enterprise search engines available: <a title="Apache Solr" href="http://lucene.apache.org/solr/" target="_blank">Apache Solr</a>. We implemented a client for it which uses the Liferay service bus to swap out the default Liferay search engine.
+
+p Now we had the proper infrastructure at our disposal it was a ‘trivial’ task to implement two custom portlets (search box in navigation bar and a result portlet). I quoted ‘trivial’ because it was not quiet trivial. We encountered a very annoying issue in the default web-content indexer Liferay provides:  it does not specify the structure ID nor the template ID in the document to be indexed.
+
+p I won’t go into specific how we solved this problem. It is sufficient to say that we are working on a robust solution which will ‘unpack’ the document  we receive from the indexer and enrich it with those fields before sending it to Solr for indexing.
+
+h3 Wrap up
+p Like always there is always more to share but that is really it for this post. Don’t forget to think about the ‘portlet design problem’ and stay tuned for our solution! As always: comments are most welcome.

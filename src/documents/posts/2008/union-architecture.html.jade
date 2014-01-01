@@ -1,0 +1,36 @@
+---
+title: The Union Architecture
+layout: post
+tags: ['architecture']
+date: 2008-09-26
+---
+
+p One of the key problems in software development, especially framework development, is finding a flexible and future proof architecture. The architect basically needs to have a crystal ball to see the future. There are some techniques and development choices which can reduce the costs of change but it is inevitable that you will hit a limit eventually.
+
+p In this post I am going to talk about 1 architectural pattern which can extend the lifetime of a framework significantly. That pattern is the ‘Onion Architecture'.
+
+p The ‘Onion Architecture' is a pattern originally composed by ‘<a title="Jeffrey Palermo" href="http://jeffreypalermo.com/">Jeffrey Palermo</a>' and it basically says: put the conceptual model and services in the inner most layer and provide the implementation for the conceptual model and services in the outer layers together with the user interface, data access layer and other implementation details which are subject to change.
+p The further away from the core a layer is, the more likely it is to change and the easier to change.
+
+p A layer in the ‘Onion Architecture' can interact to any layer below it, including the core. However, it can't interact to any layer above it. This guarantees that more outer layers can be changed without the need to change an inner layer.
+
+p One important detail is that a layer isn't the same as one component. Each layer can contain multiple components, like the image below demonstrates:
+
+figure
+	img(src='/postcontent/onion-architecture.png',alt='The Onion Architecture')
+	figcaption Thanks to Jeffrey Palermo for this image
+
+p In short, the ‘Onion Architecture' allows you to:
+ul
+	li Effectively and logically separate concept from implementation.
+	li Create a dynamic and future proof architecture.
+	li Replace outdated or ‘rotten' layers.
+	li Introduce new components to layers without changing the inner layers
+
+p That is it for now; I hope this post gives you a better insight in how to prepare your architecture for change and extendibility. If you have any question please feel free to ask them!
+
+strong Sources
+ul
+	li <a href="http://jeffreypalermo.com/blog/the-onion-architecture-part-1/">http://jeffreypalermo.com/blog/the-onion-architecture-part-1/</a>
+	li <a href="http://jeffreypalermo.com/blog/the-onion-architecture-part-2/">http://jeffreypalermo.com/blog/the-onion-architecture-part-2/</a>
+	li <a href="http://jeffreypalermo.com/blog/the-onion-architecture-part-3/">http://jeffreypalermo.com/blog/the-onion-architecture-part-3/</a>

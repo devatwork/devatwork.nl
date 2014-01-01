@@ -1,0 +1,29 @@
+---
+title: Designing an Online Shopping Cart, an Architects Tale
+layout: post
+tags: ['architecture', 'technical design', 'liones']
+date: 2009-02-14
+---
+
+p For my work at Liones I am writing a technical design for a shopping cart. The requirements are fairly basic, except for one: the shopping cart must be generic to support any payment service provider (psp) and customer relationship management (CRM) system. Also there might be several different product types in the future, like: subscriptions, downloads, pay per use, etc.. These requirements make the shop very complex and a great challenge.
+
+p I started with an investigation on the internet about this subject and I quickly found out that there aren't much articles on this topic around, but I found a few very interesting ones though. Next I started to draw some UML diagrams; I added some best practices like the Money class.
+
+p Then it got interesting: <a title="Yvonne Arnoldus" href="http://www.linkedin.com/pub/2/81b/275" target="_blank">Yvonne</a> (a colleague, senior/lead developer) and I were going over my conceptual model and we were adding and shifting responsibilities as we were going. Things went rapid from that point on: object came to the surface, responsibilities were put on the right place and the domain model started to reveal itself.
+
+p The next thing we did was to group objects into packages and again there was some debate about in which package we would put certain objects and what the dependencies between the packages were. The debates made the domain model even clearer. We came up with the following packages:
+
+ul
+	li Product Catalog (Product information and grouping)
+	li Cart (The actual cart)
+	li Payment Service (Encapsulation of different payment service providers)
+	li CRM (synchronization with back office)
+	li User (User &amp; Profile)
+
+p I am not going to discuss the packages in detail here because that is not the scope of this post.
+
+p Once we wrapped up that session, I drew the new UML diagrams (in <a title="Sparx Enterprise Architect" href="http://www.sparxsystems.com.au/products/ea/index.html" target="_blank">Sparx Enterprise Architect</a>). I made some minor refinements in the model and I set up a meeting with Yvonne and <a title="Gjalt Wijma" href="http://www.linkedin.com/pub/6/250/b8" target="_blank">Gjalt</a> (another colleague, architect) to review the technical design.
+
+p As the review session went on, we made a few minor refinements on the design and discussed how certain parts could be implemented. There was one major element that wasn't clear: how does the coupling with a payment service provider work? There seem to be 2 categories: synchronous payments and asynchronous payments.
+
+p That is where we stand now, we brainstormed on how to tackle the payment problems but that is for part 2!

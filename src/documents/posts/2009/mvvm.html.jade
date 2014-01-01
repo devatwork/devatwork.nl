@@ -1,0 +1,155 @@
+---
+title: Model View ViewModel ( M-V-VM )
+layout: post
+tags: ['wpf', 'dotnet', 'csharp']
+date: 2009-02-15
+---
+
+p Recently I have been working on a Windows Presentation Foundation (WPF) application designed to manage tasks. It is not the first time I developed an application in WPF. However, I was struggling with the same problem I was struggling with before:
+
+p <strong>The problem: Coupling my views (WPF) to my domain model (C#).</strong>
+
+p The solution I came up with back then is to make the domain model aware of the need to bind and implement specific functionality like [<a title="System.ComponentModel.INotifyPropertyChanged" href="http://msdn.microsoft.com/en-us/library/system.componentmodel.inotifypropertychanged.aspx">System.ComponentModel.INotifyPropertyChanged</a>]. By doing this I cluttered my domain model with non domain model code, which made the model difficult to understand and maintain, basically: No Go!
+
+p <strong>The solution: Model-View-ViewModel pattern</strong>
+
+p I went out looking for pattern that could help me to eliminate this code cluttering. After doing some research using my favorite search engine I discovered that there was a pattern for this problem: Model - View - ViewModel (MVVM or M-V-VM).
+
+p This pattern basically says: just wrap your domain model in another model, the view model, and implement view specific logic (like: INotifyPropertyChanged) on that view model.
+
+p I also implemented my commands on this view model class, I could have factored it out to view controllers but I didn't see the need for that right now.
+
+p For the implementation of the commands I choose the solutions suggested by [<a title="Karl on WPF" href="http://karlshifflett.wordpress.com">Karl on WPF</a>] and [<a title="Josh Smith on WPF" href="http://joshsmithonwpf.wordpress.com/">Josh Smith</a>]: the RelayCommand class. The purpose of this class is to drastically reduce the number of command needed by providing a single class which takes a delegate to execute the actual command. It also contains some logic to hook into the WPF command infrastructure.
+
+p Here is my implementation of the RelayCommand in C#:
+
+pre
+	code(class='lang-cs').
+		public class RelayCommand: ICommand
+		{
+			private readonly Predicate<object> canExecuteMethod;
+			private readonly Action</object><object> executeMethod;
+			public RelayCommand(Action</object><object> executeMethod): this(executeMethod, null) {}
+
+			public RelayCommand(Action</object><object> executeMethod, Predicate</object><object> canExecuteMethod)
+			{
+				// validate argument
+				if (executeMethod == null)
+					throw new ArgumentNullException("executeMethod");
+
+				// set values
+				this.executeMethod = executeMethod;
+				this.canExecuteMethod = canExecuteMethod;
+			}
+			#region ICommand Members
+			///<summary>
+			///Occurs when changes occur that affect whether or not the command can execute.
+			///</summary>
+			public event EventHandler CanExecuteChanged
+			{
+				add
+				{
+					if (canExecuteMethod != null)
+						CommandManager.RequerySuggested += value;
+				}
+				remove
+				{
+					if (canExecuteMethod != null)
+						CommandManager.RequerySuggested -= value;
+				}
+			}
+			/// <summary>
+			/// Defines the method to be called when the command is invoked.
+			/// </summary>
+			/// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+			public void Execute(object parameter)
+			{
+				executeMethod(parameter);
+			}
+			/// <summary>
+			/// Defines the method that determines whether the command can execute in its current state.
+			/// </summary>
+			/// <returns>
+			/// true if this command can be executed; otherwise, false.
+			/// </returns>
+			/// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+			public bool CanExecute(object parameter)
+			{
+				return canExecuteMethod == null ? true : canExecuteMethod(parameter);
+			}
+			#endregion
+			public void RaiseCanExecuteChanged(EventArgs e)
+			{
+				CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+		public class RelayCommand<t>: ICommand
+		{
+			private readonly Predicate</t><t> canExecuteMethod;
+			private readonly Action</t><t> executeMethod;
+			public RelayCommand(Action</t><t> executeMethod): this(executeMethod, null) {}
+
+			public RelayCommand(Action</t><t> executeMethod, Predicate</t><t> canExecuteMethod)
+			{
+				// validate argument
+				if (executeMethod == null)
+					throw new ArgumentNullException("executeMethod");
+
+				// set values
+				this.executeMethod = executeMethod;
+				this.canExecuteMethod = canExecuteMethod;
+			}
+			#region ICommand Members
+			///<summary>
+			///Occurs when changes occur that affect whether or not the command can execute.
+			///</summary>
+			public event EventHandler CanExecuteChanged
+			{
+				add
+				{
+					if (canExecuteMethod != null)
+						CommandManager.RequerySuggested += value;
+				}
+				remove
+				{
+					if (canExecuteMethod != null)
+						CommandManager.RequerySuggested -= value;
+				}
+			}
+
+			/// <summary>
+			/// Defines the method to be called when the command is invoked.
+			/// </summary>
+			/// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+			public void Execute(object parameter)
+			{
+				executeMethod((T)parameter);
+			}
+			/// <summary>
+			/// Defines the method that determines whether the command can execute in its current state.
+			/// </summary>
+			/// <returns>
+			/// true if this command can be executed; otherwise, false.
+			/// </returns>
+			/// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+			public bool CanExecute(object parameter)
+			{
+				return canExecuteMethod == null ? true : canExecuteMethod((T)parameter);
+			}
+			#endregion
+			public void RaiseCanExecuteChanged(EventArgs e)
+			{
+				CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+p <strong>Conclusion</strong>
+
+p The MVVM pattern is a great pattern which allows you to separate the WPF view from your domain model, preventing code cluttering. I recommend every WPF or Silverlight developer to look into this pattern and use it when you encounter the same problem I had.
+
+p <strong>References:</strong>
+
+p <a title="Karl on WPF" href="http://karlshifflett.wordpress.com/mvvm/">http://karlshifflett.wordpress.com/mvvm/</a>
+
+p <a title="Josh Smith on WPF" href="http://joshsmithonwpf.wordpress.com/category/mvvm/">http://joshsmithonwpf.wordpress.com/category/mvvm/</a></t></object>

@@ -1,0 +1,36 @@
+---
+title: Solving the Portlet Design Problem
+layout: post
+tags: ['liferay', 'liones']
+date: 2010-12-22
+---
+
+p In my <a title="Building Kluwer Support Portal – a Developers Perspective" href="/posts/2010/building-kluwer-support-portal">previous post</a> I told you about the problem we encountered while implementing the <a title="Kluwer Support" href="http://support.kluwer.nl/" target="_blank">Kluwer Support</a> portal in <a title="Enterprise open source portal and collaboration software - Liferay.com" href="http://www.liferay.com/" target="_blank">Liferay</a>. In this post I will explain the solution we came up with.
+
+p But first lets have a quick look at the problem again: We needed to support different styles per portlet and ‘read more’ links which needed to work for both custom and out-of-the-box potlets. Let have a look at some of the different ‘web-content display portlet’ styles used in the portal:
+table
+	tbody
+		tr
+			td <img class="size-full wp-image-836" style="width: 172px; height: 120px;" title="web content display portlet 1" src="http://www.devatwork.nl/wp-content/uploads/2010/12/web-content-display-portlet-1.png" alt="" width="206" height="142" />
+			td <img class="size-full wp-image-837" style="width: 172px; height: 120px;" title="web content display portlet 2" src="http://www.devatwork.nl/wp-content/uploads/2010/12/web-content-display-portlet-2.png" alt="" width="244" height="144" />
+			td <img class="size-full wp-image-838" style="width: 172px; height: 120px;" title="web content display portlet 3" src="http://www.devatwork.nl/wp-content/uploads/2010/12/web-content-display-portlet-3.png" alt="" width="211" height="246" />
+
+p Liferay, at least not version 5.2.8 EE, does not support these requirements out of the box (Not entirely true: Liferay does allow you to specify custom CSS rules per portlet instance, but you would need a front-end specialist to maintain the website which IMHO is not acceptable).
+
+p To make it even more difficult we were not allowed to use Liferay Ext or place many hooks or have impact on existing communities in the portal instance.
+
+p The solution that we came up with was to use an JSP hook to replace Liferays ‘look and feel’ page. We wrote some code which would add a new tab displaying theme specific properties to the page if the theme had a specific setting specifying the path to a velocity template which in turn would render the theme specific settings.
+
+p Some of the settings we included are:
+ul
+	li Custom CSS classes
+	li Display mode
+	li Read more link URL &amp; label
+
+p However, we can easily add more, or less, properties depending on the requirements without having to touch the implementation code or break the theme for Kluwer Support.
+
+p Next we implemented a servlet which handles the storage of our custom properties. The servlet simple updates the portlet preferences with the custom properties. The properties are read by the theme and used to determine how to render the portlet.
+
+p We all implemented this in a separate deployment package except for the mentioned velocity template which resided in the theme package. By doing this, we solved the problem not only for this project but for upcoming projects as well: We will just implement a theme and the velocity template containing the custom properties for that particular project! I am willing to share some code, let met know if you want it.
+
+p I am very curious about the way you would have solved this problem and what you think of this solution so please write a comment.

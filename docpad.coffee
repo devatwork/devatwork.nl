@@ -64,7 +64,7 @@ docpadConfig =
     # Get the prepared site/document keywords
     getPreparedKeywords: ->
       # Merge the document keywords with the site keywords
-      @site.keywords.concat(@document.keywords or []).join(', ')
+      @site.keywords.concat(@document.keywords or @document.tags or []).join(', ')
 
 
   # Collections
@@ -78,7 +78,7 @@ docpadConfig =
 
     # This one, will fetch in all documents that will be outputted to the posts directory
     posts: (database) ->
-      database.findAllLive({relativeOutDirPath:'posts'},[date:-1])
+      database.findAllLive({relativeOutDirPath:/posts[\/\\]\w+/},[date:-1])
 
     # This one, will fetch in all documents that will be outputted to the projects directory
     projects: (database) ->

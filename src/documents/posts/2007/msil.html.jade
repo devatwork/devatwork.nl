@@ -1,0 +1,103 @@
+---
+title: Microsoft Intermediate Language
+layout: post
+tags: ['dotnet', 'msil', 'csharp']
+date: 2007-05-23
+---
+
+p In deze post zal ik vertellen over Microsoft intermediate language: de assembly taal van het .NET platform, wat je er mee kunt, waarom je het zou gebruiken en hoe je het gebruikt.
+
+h2 Microsoft Intermediate Language
+p Microsoft Intermediate Language (MSIL, IL) is de assembly taal van het .NET platform. Met deze taal kun je alle mogelijkheden, waar het .NET platform over beschikt, ten volste benutten. De meeste programmeertalen voor .NET, zoals C# en VB.NET, kunnen de mogelijkheden van .NET niet volledig benutten, omdat er bepaalde elementen niet uitgedrukt kunnen worden. Ook kan de taal gebruikt worden om runtime nieuwe programma code aan te maken.
+
+p MSIL wordt door de Common Language Runtime omgezet naar door de processor uitvoerbare instructies. Tijdens deze compilatie worden er optimalisatie uitgevoerd, zodat het systeem zo optimaal mogelijk wordt benut.
+
+h2 Praktisch Gebruik
+p In dit hoofdstuk zal ik een voorbeeld geven van het praktisch toepassen van mijn kennis van IL in een echte applicatie. De applicatie waar het om gaat is een bibliotheek waarmee er met Aspect Oriented Programming (AOP) kan worden gewerkt. De IL code wordt gebruikt om realtime een proxy te creÃ«ren.
+
+p De bibliotheek bestaat uit een definitie van een callback delegate en een proxy fabriek. Door gebruik te maken van de proxy kun je dynamisch een aanroep van een functie afvangen en bekijken voordat een functie uitgevoerd is. Helaas heb ik (nog) niet de tijd gehad om een hier een kwalitatief hoogwaardige bibliotheek van te maken.
+
+h2 Voorbeeld
+p Om een indruk te geven van wat IL nou eigenlijk inhoud, zal ik een voorbeeld geven van code die ik geschreven en gedocumenteerd heb. Het programma is een console applicatie dat de gebruiker vraagt om een getal in te voeren en controleert vervolgens of het ingevoerde getal even, oneven of geen getal is.
+
+pre
+	code(class='lang-cs').
+		.assembly extern mscorlib {auto}
+		.assembly OddOrEven {}
+		.module OddOrEven.exe
+
+		.namespace Odd.or
+		{
+			.class public auto ansi Even extends [mscorlib]System.Object
+			{
+				.field public static int32 val
+
+				.method public static void check() cil managed
+				{
+					.entrypoint
+					.locals init (int32 RetVal)
+
+				AskForNumber:
+					// Vraag om een nummer
+					ldstr "Enter a number"
+					call void [mscorlib]System.Console::WriteLine(string)
+
+					.try
+					{
+						call string [mscorlib]System.Console::ReadLine()		// lees de ingevoerde tekst
+						ldstr "%d"																					// laad "%d" naar de stack, %d parst een getal, zie sscanf documentatie voor details
+						ldsflda int32 Odd.or.Even::val											// laad het adres van de waarde waarin de geparste tekst gezet moet worden
+						call vararg int32 sscanf(string,string,...,int32*)	// parse de ingevoerde tekst, de return waarde geeft aan of de parse succesvol was
+						stloc.0																							// sla de geretourneerde waarde op
+						leave.s DidntBlowUp																	// er zijn geen excepties opgetreden
+					}
+					catch [mscorlib]System.Exception
+					{
+						// haalt de geretourneerde e waarde van de aanroep naar sscanf van de evaluatie stack
+						pop
+
+						// geef het berich weer dat er een exceptie is opgetreden
+						ldstr "Kaboom!"
+						call void [mscorlib]System.Console::WriteLine(string)
+
+						// spring naar het einde van de functie
+						leave.s Return
+					}
+
+				DidntBlowUp:
+					ldloc.0													// laad de geretourneerde waarde van de aanroep naar sscanf
+					brfalse.s Error									// springt naar Error wanneer de waarde 0 is
+
+					ldsfld int32 Odd.or.Even::val		// laad de geparste integer
+					ldc.i4.1												// laad 1
+					and															// bitwise and
+					brfalse.s ItsEven								// springt naar ItsEven wanneer het laatste bit 0 is
+
+					ldstr "Odd!"
+					br.s PrintAndReturn
+
+				ItsEven:
+					ldstr "Even!"
+					br.s PrintAndReturn
+
+				Error:
+					ldstr "How rude!"
+
+				PrintAndReturn:
+					call void [mscorlib]System.Console::WriteLine(string)
+					ldloc.0
+					brtrue.s AskForNumber
+
+				Return:
+					ret
+				}
+			}
+		}
+
+		// definieer de sscanf functie
+		.method public static pinvokeimpl("msvcrt.dll" cdecl)	vararg int32 sscanf(string,string) cil managed { }
+
+p Het programma demonstreert ook het gebruik van unmanaged code door middel van een aanroep met behulp van pinvoke. Om dit programma uit te voeren heb je de .NET 2.0 SDK nodig. Kopier de bovenstaande code in een bestand en noem dit OddOrEven.il. Voer het volgende commando uit met de SDK commandline: ilasm OddOrEven.il.
+
+h2 Conclusie
+p De Microsoft Intermediate Language is een krachtige programmeer taal om de mogelijkheden van het .NET platform tot het uiterste te benutten. Het programmeren in IL is echter niet zo eenvoudig als het is met bijvoorbeeld C#, er is veel kennis en discipline voor nodig. Ook het ontwikkelen in IL is erg tijdrovend. Mijn ervaring is dat je voor de meeste taken C#/VB.NET het beste kunt gebruiken, maar voor specifieke taken IL, bijvoorbeeld bij het optimaliseren van de snelheid of het geheugengebruik van een applicatie. Eigenlijk is het hetzelfde als bij het ontwikkelen in C waar je assembly gebruikt voor de meest kritische gedeelten. Ook voor het dynamisch generen van .NET types is IL een uitstekende keus.
