@@ -82,7 +82,7 @@ docpadConfig =
 
     # This one, will fetch in all documents that will be outputted to the projects directory
     projects: (database) ->
-      database.findAllLive({relativeOutDirPath:'projects'},[date:-1])
+      database.findAllLive({relativeOutDirPath:'projects'}, [pageOrder:1,title:1])
 
 
   # DocPad Events

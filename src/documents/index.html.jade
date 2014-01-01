@@ -3,21 +3,33 @@ layout: 'default'
 title: 'Home'
 ---
 
-// Main hero unit for a primary marketing message or call to action.
-.jumbotron
-  h1 Welcome to your new site!
-  p: :markdown
-    We've copied over the [Twitter Bootstrap Skeleton](https://github.com/docpad/twitter-bootstrap.docpad) for you already, which is what you're currently viewing.
-    <br>
-    Step through the guide below and we'll walk you through the process of working with your first docpad website :-)
+h1 Hello, I am Bert Willems
+h2 a Web development enthousiast, welcome to my website!
 
-// Example row of columns.
-.row
-  .col-md-6
-    h2 Docpad
-    p DocPad takes that good ol' simple approach of writing files and wraps it with the best modern innovations, providing an awesome intuitive, liberating and empowering solution for HTML5 web development.</p>
-    p: a.btn.btn-default(href="https://github.com/bevry/docpad") Visit Website
-  .col-md-6
-    h2 Twitter Bootstrap
-    p Bootstrap is a toolkit from Twitter designed to kickstart development of webapps and sites. It includes base CSS and HTML for typography, forms, buttons, tables, grids, navigation, and more.</p>
-    p: a.btn.btn-default(href="http://twitter.github.com/bootstrap/") Visit Website
+p On this website you will find my blog posts and my projects.
+
+div(class='panel panel-primary')
+	div.panel-heading Recent posts
+	div.panel-body
+		div.list-group
+			each doc in getCollection('posts').toJSON().slice(0,5)
+				a.list-group-item(href=doc.url)
+					h4.list-group-item-heading= doc.title
+					h5
+						span= doc.date.toDateString()
+						each tag in doc.tags
+							span.tag= tag
+					p.list-group-item-text= doc.abstract
+
+
+div(class='panel panel-primary')
+	div.panel-heading My projects
+	div.panel-body
+		div.list-group
+			each doc in getCollection('projects').toJSON()
+				a.list-group-item(href=doc.url)
+					h4.list-group-item-heading= doc.title
+					h5
+						each tag in doc.tags
+							span.tag= tag
+					p.list-group-item-text= doc.abstract

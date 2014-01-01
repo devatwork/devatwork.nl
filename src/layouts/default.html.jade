@@ -85,7 +85,30 @@ html(lang="en")
 				div(class='col-lg-8 col-md-8 col-sm-7 col-left')
 					section(class='content')!= content
 				div(class='col-lg-4 col-md-4 col-sm-5 col-right')
-					section(class='sidebar')!= sidebar
+					section(class='sidebar')
+						div(class='panel panel-primary')
+							div.panel-heading Recent posts
+							div.panel-body
+								div.list-group
+									each doc in getCollection('posts').toJSON().slice(0,5)
+										a.list-group-item(href=doc.url)
+											h4.list-group-item-heading= doc.title
+											h5
+												span= doc.date.toDateString()
+												each tag in doc.tags
+													span.tag= tag
+											p.primary-group-item-text= doc.abstract
+						div(class='panel panel-primary')
+							div.panel-heading All projects
+							div.panel-body
+								div.list-group
+									each doc in getCollection('projects').toJSON()
+										a.list-group-item(href=doc.url)
+											h4.list-group-item-heading= doc.title
+											h5
+												each tag in doc.tags
+													span.tag= tag
+											p.list-group-item-text= doc.abstract
 
 		// Scripts
 		!= scripts.toHTML()
