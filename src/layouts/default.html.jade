@@ -12,6 +12,9 @@
 - scripts.add(["/vendor/components-bootstrap/js/bootstrap.js"])
 - styles.add(["/vendor/components-bootstrap/css/bootstrap.css"])
 
+//- Font Awesome
+- styles.add(["//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"])
+
 //- Other Scripts
 - scripts.add(["/vendor/log.js","/vendor/modernizr.js"])
 
@@ -59,17 +62,25 @@ html(lang="en")
 			div(class='row top')
 				div(class='col-lg-8 col-md-8 col-sm-7 col-left')
 					div.brand
-						a(href='/') DevAtWork.nl
+						a(href='/') Dev @ Work.nl
 				div(class='col-lg-4 col-md-4 col-sm-5 col-right')
 					nav
 						ul(class='list-inline')
-							- clazzz = (document.url === '/') ? 'active' : null
-							li(class=clazzz)
-								a(href='/') Home
 							each doc in getCollection('pages').toJSON()
 								- clazz = (document.url === doc.url) ? 'active' : null
 								li(class=clazz)
 									a(href=doc.url)= doc.title
+							li.social
+								a(href='https://www.facebook.com/devatwork',title='facebook')
+									i(class='fa fa-facebook-square')
+								a(href='https://github.com/devatwork',title='github')
+									i(class='fa fa-github-square')
+								a(href='https://plus.google.com/111880992300867132101/',title='google plus')
+									i(class='fa fa-google-plus-square')
+								a(href='http://nl.linkedin.com/in/trilobyte',title='linkedin')
+									i(class='fa fa-linkedin-square')
+								a(href='https://twitter.com/devatwork',title='twitter')
+									i(class='fa fa-twitter-square')
 			div(class='row bottom')
 				div(class='col-lg-8 col-md-8 col-sm-7 col-left')
 					section(class='content')!= content

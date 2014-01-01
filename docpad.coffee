@@ -20,7 +20,7 @@ docpadConfig =
       ]
 
       # The default title of our website
-      title: "DevAtWork"
+      title: "Dev @ Work"
 
       # The website description (for SEO)
       description: """
