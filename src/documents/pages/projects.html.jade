@@ -4,13 +4,11 @@ layout: page
 pageOrder: 2
 ---
 
-div(class='panel panel-primary')
-	div.panel-body
-		div.list-group
-			each doc in getCollection('projects').toJSON()
-				a.list-group-item(href=doc.url)
-					h4.list-group-item-heading= doc.title
-					h5
-						each tag in doc.tags
-							span.tag= tag
-					p.list-group-item-text= doc.abstract
+div.list-group
+	each doc in getCollection('projects').toJSON()
+		a.list-group-item(href=doc.url)
+			h4.list-group-item-heading= doc.title
+			h5
+				each tag in doc.tags
+					span.tag= tag
+			p.list-group-item-text= doc.abstract
