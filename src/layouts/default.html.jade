@@ -55,25 +55,26 @@ html(lang="en")
 		!= styles.toHTML()
 
 	body
-		div(class='row top')
-			div(class='col-lg-8 col-md-8 col-sm-7 col-left')
-				div.brand
-					a(href='/') DevAtWork.nl
-			div(class='col-lg-4 col-md-4 col-sm-5 col-right')
-				nav
-					ul(class='list-inline')
-						- clazzz = (document.url === '/') ? 'active' : null
-						li(class=clazzz)
-							a(href='/') Home
-						each doc in getCollection('pages').toJSON()
-							- clazz = (document.url === doc.url) ? 'active' : null
-							li(class=clazz)
-								a(href=doc.url)= doc.title
-		div(class='row bottom')
-			div(class='col-lg-8 col-md-8 col-sm-7 col-left')
-				section(class='content')!= content
-			div(class='col-lg-4 col-md-4 col-sm-5 col-right')
-				section(class='sidebar')!= sidebar
+		div(class='container')
+			div(class='row top')
+				div(class='col-lg-8 col-md-8 col-sm-7 col-left')
+					div.brand
+						a(href='/') DevAtWork.nl
+				div(class='col-lg-4 col-md-4 col-sm-5 col-right')
+					nav
+						ul(class='list-inline')
+							- clazzz = (document.url === '/') ? 'active' : null
+							li(class=clazzz)
+								a(href='/') Home
+							each doc in getCollection('pages').toJSON()
+								- clazz = (document.url === doc.url) ? 'active' : null
+								li(class=clazz)
+									a(href=doc.url)= doc.title
+			div(class='row bottom')
+				div(class='col-lg-8 col-md-8 col-sm-7 col-left')
+					section(class='content')!= content
+				div(class='col-lg-4 col-md-4 col-sm-5 col-right')
+					section(class='sidebar')!= sidebar
 
 		// Scripts
 		!= scripts.toHTML()

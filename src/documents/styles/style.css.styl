@@ -1,8 +1,17 @@
-.col-left,
-.col-right
-	padding 0
+html, body, .container
+	height 100%
+
+.container
+	width 100%
+	max-width 100%
 
 .top
+	position fixed
+	width 100%
+
+	.col-left,
+	.col-right
+		padding 0
 
 	.brand
 		background #333
@@ -36,3 +45,14 @@
 				font-size 1.5em
 				padding 10px 0
 				text-transform uppercase
+
+.bottom
+	height 100%
+	padding-top 50px
+
+	.col-left,
+	.col-right
+		height 100%
+		overflow auto
+	.col-right
+		background-color #f7
