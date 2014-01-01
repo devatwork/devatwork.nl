@@ -111,5 +111,11 @@ docpadConfig =
           next()
 
 
+  # GitHub pages configuration
+  # =============
+  ghpages:
+    deployRemote: 'target'
+    deployBranch: 'master'
+
 # Export our DocPad Configuration
 module.exports = docpadConfig
