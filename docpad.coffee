@@ -91,6 +91,15 @@ docpadConfig =
     projects: (database) ->
       database.findAllLive({relativeOutDirPath:'projects'}, [pageOrder:1,title:1])
 
+    # This one, will contain all the documents thaat need to be indexed
+    sitemap: (database) ->
+      return @getCollection('documents')
+        .createChildCollection()
+        .setFilter 'content', (model) ->
+          title = model.get('title')
+          return title? and not model.get('sitemapIngore')
+        .query()
+
 
   # DocPad Events
   # =============
@@ -137,6 +146,12 @@ docpadConfig =
 
     rss:
       collection: 'posts'
+
+    # Sitemap configuration
+    # =============  
+
+    sitemap:
+      collectionName: 'sitemap'
 
 
 # Export our DocPad Configuration
