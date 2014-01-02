@@ -132,5 +132,12 @@ docpadConfig =
       deployRemote: 'target'
       deployBranch: 'master'
 
+    # RSS configuration
+    # =============  
+
+    rss:
+      collection: 'posts'
+
+
 # Export our DocPad Configuration
 module.exports = docpadConfig

@@ -58,6 +58,9 @@ html(lang="en")
 		// Styles
 		!= styles.toHTML()
 
+		// RSS
+		link(rel='alternate',type='application/rss+xml',title='Post RSS feed - Dev@Work',href='/rss.xml')
+
 	body
 		div(class='container')
 			div(class='row top')

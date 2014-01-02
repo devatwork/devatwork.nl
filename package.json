@@ -47,7 +47,8 @@
     "bower": "~1",
     "docpad-plugin-ghpages": "~2.4.1",
     "docpad-plugin-highlightjs": "~2.1.9",
-    "docpad-plugin-services": "~2.5.0"
+    "docpad-plugin-services": "~2.5.0",
+    "docpad-plugin-rss": "~2.0.1"
   },
   "main": "node_modules/docpad/bin/docpad-server",
   "scripts": {
