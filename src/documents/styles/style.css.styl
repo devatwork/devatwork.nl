@@ -1,3 +1,4 @@
+/* Typography */
 body
 	font-family 'Lato', sans-serif
 
@@ -12,21 +13,69 @@ h4
 h1
 	border-bottom solid 2px
 
+::-webkit-scrollbar
+	width 12px
+::-webkit-scrollbar-track
+	background #e6
+::-webkit-scrollbar-thumb
+	background #ccc
+::-webkit-scrollbar-thumb:window-inactive
+	background #ccc
+
+/* Layout */
 html, body, .container
 	height 100%
-
 .container
 	width 100%
 	max-width 100%
+	margin 0
+	padding 0
+	@media (min-width: 768px)
+		width 100%
+		max-width 100%
+	@media (min-width: 992px)
+		width 100%
+		max-width 100%
+	@media (min-width: 1200px)
+		width 100%
+		max-width 100%
+.row
+	margin 0
+	&.top
+		position static
+		@media (min-width: 768px)
+			position fixed
+			width 100%
+		.col-left,
+		.col-right
+			padding 0
+	&.bottom
+		height 100%
+		@media (min-width: 768px)
+			padding-top 50px
+		& > div
+			padding 0
+			@media (min-width: 768px) and (max-width: 992px)
+				height 100%
+				overflow auto
+				-webkit-overflow-scrolling touch
+			@media (min-width: 992px)
+				height 100%
+				overflow auto
+		.col-left
+			section
+				padding 15px
+				@media (min-width: 992px)
+					padding 30px 40px
+				@media (min-width: 1200px)
+					padding 30px 80px
+		.col-right
+			section
+				@media (min-width: 992px)
+					padding 15px
 
+/* Header */
 .top
-	position fixed
-	width 100%
-
-	.col-left,
-	.col-right
-		padding 0
-
 	.brand
 		background #333
 		margin: 0
@@ -38,51 +87,42 @@ html, body, .container
 			font-weight 700
 			padding 10px 0
 			text-transform uppercase
-
+	nav
+		border-bottom 1px solid #e6
+		@media (min-width: 768px)
+			border none
 	.list-inline
 		display table
 		margin 0
 		padding 0
 		text-align center
 		width 100%
-
 		li
 			display table-cell
 			margin 0
 			padding 0
-			width 25%
-
+			width 20%
 			&.active
 				background #f7
-
 			a
 				border-right 1px solid #e6
 				color #333
 				display block
-				font-size 1.5em
 				font-weight bold
-				padding 10px 0
+				padding 15px 0
 				text-transform uppercase
 			&.social
+				width auto
 				a
 					border-right none
 					display inline
 					font-size 24px
-					padding: 0 2px
+					padding 0 2px
 
+/* Body */
 .bottom
-	height 100%
-	padding-top 50px
-
-	.col-left,
-	.col-right
-		height 100%
-		overflow auto
-	.col-left
-		padding: 30px 80px
 	.col-right
 		background-color #f7
-		padding-top 30px
 
 .list-group-item
 	h5
@@ -118,17 +158,13 @@ hgroup
 			&:last-child:after
 				content ''
 
-::-webkit-scrollbar
-	width 12px
-::-webkit-scrollbar-track
-	background #e6
-::-webkit-scrollbar-thumb
-	background #ccc
-::-webkit-scrollbar-thumb:window-inactive
-	background #ccc
-
 .navlinks
-	.navlinks-prev
-		float left
+	.navlinks-prev,
 	.navlinks-next
-		float right
+		display block
+	@media (min-width: 1200px)
+		.navlinks-prev
+			float left
+		.navlinks-next
+			float right
+
