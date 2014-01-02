@@ -153,6 +153,12 @@ docpadConfig =
     sitemap:
       collectionName: 'sitemap'
 
+    # Navlinks configuration
+    # =============  
+
+    navlinks:
+      collections:
+        posts: -1
 
 # Export our DocPad Configuration
 module.exports = docpadConfig

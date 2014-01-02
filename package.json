@@ -49,7 +49,8 @@
     "docpad-plugin-highlightjs": "~2.1.9",
     "docpad-plugin-services": "~2.5.0",
     "docpad-plugin-rss": "~2.0.1",
-    "docpad-plugin-sitemap": "~2.2.0"
+    "docpad-plugin-sitemap": "~2.2.0",
+    "docpad-plugin-navlinks": "~2.0.2"
   },
   "main": "node_modules/docpad/bin/docpad-server",
   "scripts": {
