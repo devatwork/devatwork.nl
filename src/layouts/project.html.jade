@@ -2,21 +2,28 @@
 layout: default
 ---
 
-article#post.post
-  hgroup
-    h1= document.title
-    h3
-      each tag in document.tags
-        span.tag= tag
-  .post-content!= content
-
-footer
-  if document.relatedDocuments && document.relatedDocuments.length
-    section#related
-      h3 Related Posts
-      nav.linklist
-        each doc in document.relatedDocuments
-          li
-            span= doc.date.toDateString()
-            |  &raquo;&nbsp;
-            a(href=doc.url)= doc.title
+article.project
+	hgroup
+		h1= document.title
+	div.panel.panel-primary
+		div.panel-heading Details
+		div.panel-body
+			dl.dl-horizontal
+				dt Tags
+				dd.tags
+					each tag in document.tags
+						span.tag= tag
+				if document.git
+					dt GitHub
+					dd
+						a(href=document.git)=document.git
+				if document.npm
+					dt NPM
+					dd
+						a(href=document.npm)=document.npm
+				if document.travisci
+					dt TravisCI
+					dd
+						a(href=document.travisci)
+							img(src=document.travisci+'.png?branch=master',alt='Build Status')
+	.post-content!= content
