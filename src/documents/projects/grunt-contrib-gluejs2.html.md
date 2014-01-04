@@ -22,7 +22,7 @@ npm install grunt-contrib-gluejs2 --save-dev
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-gluejs');
+grunt.loadNpmTasks('grunt-contrib-gluejs2');
 ```
 
 ## The "gluejs" task
@@ -81,6 +81,7 @@ grunt.initConfig({
 
 ## Release History
 
+* 2014-01-04   v0.1.1   Small fixes.
 * 2014-01-04   v0.1.0   Initial NPM release.
 * 2014-01-04   v0.0.1   Initial release.
 
