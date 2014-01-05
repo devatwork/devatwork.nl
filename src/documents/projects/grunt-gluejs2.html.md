@@ -1,11 +1,11 @@
 ---
-title: grunt-gluejs2
+title: grunt-contrib-gluejs2
 layout: project
 abstract: 'A Grunt plugin for GlueJS v2.2+.'
 tags: ['gluejs', 'grunt', 'task', 'commonjs', 'browserify']
-git: https://github.com/devatwork/grunt-gluejs2
-npm: https://npmjs.org/package/grunt-gluejs2
-travisci: https://travis-ci.org/devatwork/grunt-gluejs2
+git: https://github.com/devatwork/grunt-contrib-gluejs2
+npm: https://npmjs.org/package/grunt-contrib-gluejs2
+travisci: https://travis-ci.org/devatwork/grunt-contrib-gluejs2
 ---
 
 A Grunt plugin for [GlueJS](http://mixu.net/gluejs/) v2.2+. GlueJS is package Node/CommonJS modules for the browser.
@@ -16,13 +16,13 @@ This plugin requires Grunt `~0.4.1`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-gluejs2 --save-dev
+npm install grunt-contrib-gluejs2 --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-gluejs2');
+grunt.loadNpmTasks('grunt-contrib-gluejs2');
 ```
 
 ## The "gluejs" task
@@ -81,6 +81,7 @@ grunt.initConfig({
 
 ## Release History
 
+* 2014-01-04   v0.1.1   Small fixes.
 * 2014-01-04   v0.1.0   Initial NPM release.
 * 2014-01-04   v0.0.1   Initial release.
 
