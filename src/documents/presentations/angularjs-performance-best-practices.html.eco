@@ -1,0 +1,367 @@
+---
+title: AngularJS Performance Best Practices
+layout: presentation
+tags: ['AngularJS', 'performance']
+date: 2014-03-04
+abstract: Performance best-practices learned from a real-life, 15k lines of code, 14 month, AngularJS project.
+author: Stef Busking & Bert Willems
+---
+
+<div class="slides">
+	<!-- Intro -->
+	<section>
+		<h1>AngularJS Performance</h1>
+		<h3>Performance best-practices learned from a real-life, 15k lines of code, 14 month, AngularJS project.</h3>
+		<p>
+			<small><a href="https://github.com/bwrrp">Stef Busking</a> / <a href="http://twitter.com/bwrrp">@bwrrp</a> and <a href="http://www.devatwork.nl/">Bert Willems</a> / <a href="http://twitter.com/devatwork">@devatwork</a></small>
+		</p>
+		<p>Dutch AngularJS meetup #SupersonicCookie, 2014/03/04</p>
+	</section>
+
+	<section>
+		<h2>About Stef</h2>
+		<ul>
+			<li>Tech Lead JavaScript @ <a href="http://www.fontoxml.com/">FontoXML</a> / <a href="http://www.liones.nl/">Liones</a></li>
+			<li>JS / .NET / C++ / web / graphics / visualization / games</li>
+			<li><a href="https://twitter.com/bwrrp">@bwrrp</a></li>
+			<li><a href="https://github.com/bwrrp">https://github.com/bwrrp</a></li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>About Bert</h2>
+		<ul>
+			<li>Product Architect &amp; Developer Coach @ <a href="http://www.fontoxml.com/">FontoXML</a> / <a href="http://www.liones.nl/">Liones</a></li>
+			<li>Passionate about open-source software, food and Whiskey</li>
+			<li>JS / .NET dev</li>
+			<li><a href="https://twitter.com/devatwork">@devatwork</a></li>
+			<li><a href="https://github.com/devatwork">https://github.com/devatwork</a></li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>About FontoXML</h2>
+		<ul>
+			<li>A web-based structured content editor</li>
+			<li>Valid XML</li>
+			<li>WYSIWYM</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>Overview</h2>
+		<ul>
+			<li>Introducing the case: Kluwer Creator</li>
+			<li>Bad Practices: How not to apply AngularJS</li>
+			<li>Better Practices</li>
+			<li>Further Improvements</li>
+		</ul>
+	</section>
+	<!-- /Intro -->
+
+	<!-- Creator Intro -->
+	<section class="stack">
+		<section>
+			<h2>Kluwer Creator: The Case</h2>
+			<p>Let 5.000 laywers &amp; professors write structured content (XML) in an online IDE.</p>
+			<p class="fragment">And no, they do not like XML either! :)</p>
+			<aside class="notes">
+				<p>Kluwer is one of the largest publishing companies in the Netherlands, part of Wolters Kluwer.</p>
+				<p>Sells books, magazines &amp; online subscriptions to need-to-know content in the legal and accounting domains</p>
+				<p>Works with external authors</p>
+			</aside>
+		</section>
+		<section data-background="angularjs-performance-best-practices/creator-result-start-work.png"></section>
+		<section data-background="angularjs-performance-best-practices/creator-result-work-overview.png"></section>
+		<section data-background="angularjs-performance-best-practices/creator-result-editor.png"></section>
+	</section>
+
+	<section>
+		<h2>Kluwer Creator: The Challenges</h2>
+		<ul>
+			<li>Making 5k people happy</li>
+			<li>Domain: Legal &amp; Accounting</li>
+			<li>XML editor from scratch</li>
+			<li>JavaScript</li>
+			<li>Unlearn jQuery, learn AngularJS</li>
+		</ul>
+		<aside class="notes">
+			<p>Content structures for the legal and accounting domains are complex: time travel within a law for example.</p>
+			<p>We did research but there was no online XML editor capable of supporting 5k non-technical authors, so we had to build one from scratch.</p>
+			<p>We had some experience with jQuery but never with a project of this scale.</p>
+			<p>Use of jQuery came to a grinding hold due to the complexity, we had to switch to an JS MVC. Needless to say we chooce AngularJS.</p>
+			<p>None of the team member had any prior experience with AngularJS.</p>
+		</aside>
+	</section>
+
+	<section>
+		<h2>Kluwer Creator: The Project</h2>
+		<ul>
+			<li>17 months of 2 week sprints</li>
+			<li>4-6 Liones devs &amp; 3-6 Kluwer devs</li>
+			<li>~15k LoC AngularJS</li>
+			<li>~50k LoC Editor</li>
+		</ul>
+		<aside class="notes">
+			<p>Started with a two month analysis phase after which we had to choose SCRUM because project was to large</p>
+			<p>Teams: Creator front-end &amp; back-end, editor and PASS (enterprise CMS)</p>
+		</aside>
+	</section>
+	<!-- /Creator Intro -->
+
+	<!-- Bad Practices -->
+	<section>
+		<h2>Bad Practices</h2>
+	</section>
+	<section class="stack">
+		<section>
+			<h2>Too many watches</h2>
+			<ul>
+				<li>Toolbar</li>
+				<li>Table of Contents</li>
+			</ul>
+			<aside class="notes">
+				<p>Each button in the toolbar has a few watches: isEnabled, isActive. There are 100+ buttons.</p>
+				<p>Each tocentry adds about 15 watches, tocs can be 500+ entries.</p>
+			</aside>
+		</section>
+		<section data-background="angularjs-performance-best-practices/creator-too-many-watches.png"></section>
+	</section>
+	<section>
+		<h2>Watching functions instead of properties</h2>
+		<ul>
+			<li>Command state</li>
+			<li>ToC visibility:</li>
+		</ul>
+		<pre><code>function contains(toc, matches, thisArg) {
+return _.any(toc.kinderen, function(child) {
+return matches.call(thisArg, child) ||
+contains(child, matches, thisArg);
+}, this);
+}</code></pre>
+		<aside class="notes">
+			<p>Calculating stuff is expensive and generates garbage.</p>
+			<p>Bold enabled/active? ToC collapsing</p>
+			<p>Recursion!</p>
+		</aside>
+	</section>
+	<section class="stack">
+		<section>
+			<h2>Watching DOM properties</h2>
+			<ul>
+				<li>Margin notes</li>
+				<li>Layout trashing</li>
+				<li>No ordering of watch callbacks!</li>
+			</ul>
+			<aside class="notes">
+				<p>filter on hover</p>
+				<p>ng-repeat creates</p>
+				<p>positioning via template</p>
+			</aside>
+		</section>
+		<section data-background="angularjs-performance-best-practices/creator-watch-dom-properties.png"></section>
+	</section>
+	<section>
+		<h2>Too many digest calls</h2>
+		<ul>
+			<li>Recursive ng-repeat (>10 levels)</li>
+			<li>Frequent events: selectionchange, keypress &amp; mousemove</li>
+		</ul>
+		<aside class="notes">
+			<p>Recursive ng-repeat hits digest loop limit. ToC can be deeply nested.</p>
+			<p>cursor position in the editor causes root scope digest, some users can type very fast</p>
+			<p>Hover feedback on worksheets, text changes etc</p>
+		</aside>
+	</section>
+	<section>
+		<h2>Conclusion: Action vs Reaction</h2>
+		<table>
+			<tr>
+				<td style="vertical-align: top;">
+					<img src="angularjs-performance-best-practices/every-action-opposite-react.png">
+				</td>
+				<td>
+					<ul>
+						<li>AngularJS has no dependency modeling, just dirty checking
+							<ul>
+								<li>Everything is checked all the time</li>
+							</ul>
+						</li>
+						<li class="fragment">You may NEED lots of watches or have lots of changes</li>
+						<li class="fragment"><em>F</em>unctional <em>R</em>eactive <em>P</em>rogramming models complete event flow
+							<ul>
+								<li>Every dependency is explicit</li>
+							</ul>
+						</li>
+						<li class="fragment">So should we use Bacon.js / KnockoutJS / Frameless / &hellip;<span class="fragment"> / jQuery?</span></li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+		<aside class="notes">
+			<p>Reactive: wait for change</p>
+			<p>Proactive: check if anything has changed</p>
+			<p>FRP: Functional Reactive Programming: everything that causes a change is tracked all the way to the final result(s).</p>
+			<p>When you have lots of watches / lots of changes often on small subset of data, so should be possible to make this faster</p>
+		</aside>
+	</section>
+	<!-- /Bad Practices -->
+
+	<!-- Better Practices -->
+	<section>
+		<h2>Better Practices</h2>
+		<img src="angularjs-performance-best-practices/rescuecat.jpg">
+	</section>
+	<section class="stack">
+		<section>
+			<h2>Use cheap watches</h2>
+			<img src="angularjs-performance-best-practices/watches.jpg">
+		</section>
+		<section>
+			<h2>Use cheap $watch()es</h2>
+			<ul>
+				<li>Compute once:
+					<ul>
+						<li>precompute viewmodel on change</li>
+						<li>or watch input, compute when it changes</li>
+					</ul>
+				</li>
+				<li class="fragment">MV<u>VM</u></li>
+				<li class="fragment">Use caches if necessary</li>
+				<li class="fragment">Consider using an event instead</li>
+			</ul>
+			<aside class="notes">Basically, use separate models prepared for specific views when mapping gets complex. Consider using an explicit event instead of an implicit $watch dependency to update a specific (part of a) viewmodel.</aside>
+		</section>
+	</section>
+	<section>
+		<h2>Keep the DOM minimal</h2>
+		<ul>
+			<li>Remove non-visible elements from the DOM</li>
+			<li>
+				<p>Remove unused watches:</p>
+				<pre><code>var unregister = $scope.$watch(&hellip;);
+// No longer needed at this point
+unregister();</code></pre>
+			</li>
+			<li>Prefer ngIf over ngShow/ngHide</li>
+		</ul>
+		<aside class="notes">
+			<p>Prevent useless directives remaining active (watches, event handlers, ...)</p>
+			<p>For example, ToC popup menu was in DOM for every entry</p>
+			<p>In the editor we use a culling algorithm to remove non-visible worksheets from the DOM.</p>
+		</aside>
+	</section>
+	<section>
+		<h2>Template precomputation</h2>
+		<p>For complex parts of the DOM which rarely update, consider baking a template.</p>
+		<aside class="notes">For example, ToC structure could be static wrt. watches, except for small things like status icons. Use event or a single cheap watch to detect when to update.</aside>
+	</section>
+	<section class="stack">
+		<section>
+			<h2>Don't use AngularJS</h2>
+			<ul>
+				<li class="fragment fade-in">At least&hellip; not when it hurts</li>
+				<li class="fragment fade-in">It is an MVC framework, not the ultimate answer to life, the universe and everything</li>
+			</ul>
+			<aside class="notes">Mix and match</aside>
+		</section>
+		<section data-background="angularjs-performance-best-practices/dontpanic.jpg"></section>
+	</section>
+	<!-- /Better Practices -->
+
+	<!-- Further Improvements -->
+	<section>
+		<h2>Further Improvements</h2>
+		<p>Coming soon to an AngularJS release near you</p>
+	</section>
+	<section>
+		<h2>Object.observe()</h2>
+		<ul>
+			<li>Get notified when any property on a given object changes</li>
+			<li class="fragment">Dependency tracking between specific watches and mutations</li>
+			<li class="fragment">Only for plain properties</li>
+			<li class="fragment">Digests are no longer required for these properties</li>
+		</ul>
+		<aside class="notes">Separates complex watches from plain property watches. Dirty checking only required for the remaining complex watches (e.g., function calls) Coming in some future version (ES7 proposal, needs browser support first). ES6 has proxies, which could be used in some cases.</aside>
+	</section>
+	<section>
+		<h2>Zone.js</h2>
+		<ul>
+			<li>Call stacks for async; hooks entering and exiting the JS VM</li>
+			<li class="fragment">No more Angular context vs JS context: automagically calls $apply</li>
+			<li class="fragment">Still a $rootScope digest</li>
+			<li class="fragment">But avoids duplicate or missing digests</li>
+			<li class="fragment"><a href="https://github.com/btford/zone.js">https://github.com/btford/zone.js</a></li>
+			<li class="fragment">Coming to AngularJS 2.0</li>
+		</ul>
+		<aside class="notes">Frequent bug: view doesn't update - oh I missed $apply / nested $apply errors / $digest spamming.</aside>
+	</section>
+	<section>
+		<h2>Angular Bacon</h2>
+		<ul>
+			<li>FRP using Bacon.js integrated in AngularJS</li>
+			<li><a href="https://github.com/lauripiispanen/angular-bacon">https://github.com/lauripiispanen/angular-bacon</a></li>
+		</ul>
+		<pre><code>var usernameInput = $scope
+.$watchAsProperty('username')
+
+var usernameIsFree = usernameInput
+.changes()
+.filter(longerThan(2))
+.flatMapLatest(function(it) { return Bacon.later(2000, it === "user"); })
+.merge(usernameInput.map(false))
+.toProperty(false)
+
+usernameIsFree
+.and(passwordIsValid)
+.and(passwordsEqual)
+.digest($scope, 'formValid')</code></pre>
+	</section>
+	<section>
+		<h2>Detached scopes</h2>
+		<ul>
+			<li>Evaluate expensive watches only when required (e.g., based on another watch)</li>
+			<li>Inspired by <a href="http://blog.scalyr.com/2013/10/31/angularjs-1200ms-to-35ms/">http://blog.scalyr.com/2013/10/31/angularjs-1200ms-to-35ms/</a>
+		</ul>
+		<pre><code>&lt;span class="logLine"
+ng-repeat="line in logLinesToShow"
+sly-evaluate-only-when="logLines">
+&lt;/span></code></pre>
+		<aside class="notes">We have a few ideas we plan to explore in the near future. One of these is the option to detach scopes from their parent so they are skipped in the $rootScope digest. More elegant solution to the baking approach. Looking at the code, we would need to do this by monkey patching AngularJS' linked list structure for child scopes.</aside>
+	</section>
+	<section>
+		<h2>Channels</h2>
+		<ul>
+			<li>Isolate specific dependencies when we want to</li>
+			<li>In code: $rootScope child with explicitly targeted watches and digests</li>
+			<li>In templates / expressions: namespacing?</li>
+		</ul>
+		<pre><code>&lt;div class="popup {{item.type}}"
+ng-show="mousechannel:hoveredItemId == item.id"
+position="mousechannel:cursorPos">
+...
+&lt;/div></code></pre>
+		<pre><code>var mousechannel = $rootScope.$newChannel('mousechannel');
+// ...
+angular.element($window).on('mousemove', function(event) {
+mousechannel.$apply(function() {
+mousechannel.cursorPos.x = event.pageX;
+mousechannel.cursorPos.y = event.pageY;
+});
+});</code></pre>
+		<aside class="notes">For specific dependencies crossing the page, for example when a certain part of a model changes frequently but most watches are not interested. Channel scope needs some work to get $apply's error handling to work. Idea is that only those watch expressions that reference the channel are evaluated when the channel is digested, resulting in a way to do cheaper updates. Combines nicely with zones: channel.$apply / selection could "stick" around async callbacks.</aside>
+	</section>
+	<!-- /Further Improvements -->
+
+	<!-- Wrap up -->
+	<section>
+		<h2>Questions?</h2>
+	</section>
+	<section>
+		<h2>Thank you!</h2>
+		<p>Slides are available at:</p>
+		<p><a href="https://bitbucket.org/liones/liones-angularjs-performance-presentation">https://bitbucket.org/liones/liones-angularjs-performance-presentation</a></p>
+	</section>
+	<!-- /Wrap up -->
+
+</div>
