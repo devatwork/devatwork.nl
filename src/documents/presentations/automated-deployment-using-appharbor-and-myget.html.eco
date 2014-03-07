@@ -1,0 +1,89 @@
+---
+title: Automated deployment using Appharbor and MyGet
+layout: presentation
+tags: ['AppHarbor', 'MyGet']
+date: 2013-10-31
+abstract: Automate your deployments using AppHarbor and MyGet.
+author: Bert Willems
+---
+
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+	<section>
+		<h1>Automated Deployments</h1>
+		<h3>using AppHarbor and MyGet</h3>
+		<p>
+			<small>Created by Bert Willems / <a href="https://twitter.com/devatwork">@devatwork</a></small>
+		</p>
+	</section>
+
+	<section>
+		<h2>About me</h2>
+		<ul>
+			<li>JS / .NET / C# dev</li>
+			<li>Passionate about open-source, food and Whiskey</li>
+			<li><a href="https://twitter.com/devatwork">@devatwork</a></li>
+			<li><a href="https://github.com/trilobyte">https://github.com/trilobyte</a></li>
+			<li><a href="http://www.fontoxml.com/">Developer Coach &amp; Architect @ FontoXML</a></li>
+			<li><a href="http://www.liones.nl/">Lead Developer @ Liones</a></li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>Manual deployments sucks!</h2>
+		<h3>But hey, somebody has got to do it</h3>
+		<ul>
+			<li class="fragment">Boring</li>
+			<li class="fragment">FTP, SSH, RDP, Putty, VPN</li>
+			<li class="fragment">Not fun at all</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>AppHarbor to the rescue!</h2>
+		<ul>
+			<li>PaaS for .NET application</li>
+			<li class="fragment">Scales your app</li>
+			<li class="fragment">Git, Mercurial, Subversion or Team Foundation Server</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>How it works</h2>
+		<img src="automated-deployment-using-appharbor-and-myget/how-appharbor-works.png" class="stretch">
+	</section>
+
+	<section>
+		<h2>Prove it!</h2>
+		<p>Demo time</p>
+	</section>
+
+	<section>
+		<h2>What about my NuGet packages?</h2>
+		<ul>
+			<li>Use MyGet, a hosted NuGet server</li>
+			<li class="fragment">Build Services</li>
+			<li class="fragment">Git, Mercurial, Subversion or Team Foundation Server</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>You are kidding right?</h2>
+		<p>Nope! Let me show you</p>
+	</section>
+
+	<section>
+		<h2>Wrap up</h2>
+		<ul>
+			<li>Don't do boring repetative work, be friction-free</li>
+			<li>Leverage the cloud</li>
+			<li>Be a happy developer!</li>
+		</ul>
+	</section>
+
+	<section>
+		<h1>THE END</h1>
+		<h3>BY Bert Willems / <a href="https://twitter.com/devatwork">@devatwork</a> / Premotion / FontoXML</h3>
+	</section>
+
+</div>
