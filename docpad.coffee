@@ -91,6 +91,10 @@ docpadConfig =
     projects: (database) ->
       database.findAllLive({relativeOutDirPath:'projects'}, [pageOrder:1,title:1])
 
+    # This one, will fetch in all documents that will be outputted to the presentations directory
+    presentations: (database) ->
+      database.findAllLive({relativeOutDirPath:'presentations'}, [date:-1])
+
     # This one, will contain all the documents thaat need to be indexed
     sitemap: (database) ->
       return @getCollection('documents')
